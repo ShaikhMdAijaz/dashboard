@@ -1,0 +1,10 @@
+<mat-icon class="close-btn" (click)="onCloseIconClicked()">clear</mat-icon>
+<span class="panel-header">Add widgets</span>
+<hr class="mt-0">
+
+<mat-list>
+  <ng-container *ngFor="let widgetType of widgetTypes">
+    <lib-widget-type [widgetType]="widgetType" (widgetTypeDragstart)="onDragstart(widgetType)"
+      (widgetTypeClicked)="onWidgetTypeClicked($event)"></lib-widget-type>
+  </ng-container>
+</mat-list>

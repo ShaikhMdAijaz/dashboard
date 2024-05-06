@@ -1,0 +1,5 @@
+<div #dragElement draggable="true" class="widget" (dblclick)="onClicked()" (dragstart)="onDragstart($event)">
+  <div class="title">{{widgetType.widgetSettings.widgetTitle}}</div>
+  <img class="thumbnail" src="{{widgetType.thumbnailUrl}}">
+  <p class="description">{{widgetType.description}}</p>
+</div>
