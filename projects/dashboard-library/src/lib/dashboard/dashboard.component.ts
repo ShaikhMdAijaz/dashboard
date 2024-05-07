@@ -14,70 +14,74 @@ export class DashboardComponent implements OnInit {
 
   @Input()
   widgetTypes: WidgetType[] = [
-  {
-    componentName: 'ChartWidgetComponent1',
-    component: ChartWidgetComponent,
-    widgetSettings: {
+    {
+      componentName: 'ChartWidgetComponent1',
+      component: ChartWidgetComponent,
+      widgetSettings: {
         widgetTitle: 'Area Chart'
-    },
-    description: 'Chart example for the demo.',
-    //module: 'SOC',
-    module: 'Area Chart',
-    thumbnailUrl: 'assets/images/widget-thumbnails/area.png',
-    placement: {
-        x: 0,
-        y: 0,
+      },
+      //cards : this.cards,
+      description: 'Chart example for the demo.',
+      checked: false,
+      //module: 'SOC',
+      module: 'Area Chart',
+      thumbnailUrl: 'assets/images/widget-thumbnails/area.png',
+      placement: {
+        x: 1,
+        y: 1,
         rows: 5,
         cols: 2,
         minItemRows: 2,
         maxItemRows: 10,
         minItemCols: 2,
         maxItemCols: 3
-    }
-  },
-  {
-    componentName: 'ChartWidgetComponent2',
-    component: ChartWidgetComponent,
-    widgetSettings: {
+      }
+    },
+    {
+      componentName: 'ChartWidgetComponent2',
+      component: ChartWidgetComponent,
+      widgetSettings: {
         widgetTitle: 'Bar Chart'
-    },
-    description: 'Chart example for the demo.',
-    //module: 'SOC',
-    module: 'Bar Chart',
-    thumbnailUrl: 'assets/images/widget-thumbnails/barChart.png',
-    placement: {
-        x: 0,
-        y: 0,
+      },
+      description: 'Chart example for the demo.',
+      checked: false,
+      //module: 'SOC',
+      module: 'Bar Chart',
+      thumbnailUrl: 'assets/images/widget-thumbnails/barChart.png',
+      placement: {
+        x: 2,
+        y: 2,
         rows: 5,
         cols: 2,
         minItemRows: 2,
         maxItemRows: 10,
         minItemCols: 2,
         maxItemCols: 3
-    }
-  },
-  {
-    componentName: 'ChartWidgetComponent3',
-    component: ChartWidgetComponent,
-    widgetSettings: {
+      }
+    },
+    {
+      componentName: 'ChartWidgetComponent3',
+      component: ChartWidgetComponent,
+      widgetSettings: {
         widgetTitle: 'Pie Chart'
-    },
-    description: 'Chart example for the demo.',
-    //module: 'SOC',
-    module: 'Pie Chart',
-    thumbnailUrl: 'assets/images/widget-thumbnails/pie.jpeg',
-    placement: {
-        x: 0,
-        y: 0,
+      },
+      description: 'Chart example for the demo.',
+      checked: false,
+      //module: 'SOC',
+      module: 'Pie Chart',
+      thumbnailUrl: 'assets/images/widget-thumbnails/pie.jpeg',
+      placement: {
+        x: 3,
+        y: 3,
         rows: 5,
         cols: 2,
         minItemRows: 2,
         maxItemRows: 10,
         minItemCols: 2,
         maxItemCols: 3
+      }
     }
-  }
-];
+  ];
 
   @ViewChild('dashboardgrid', { static: false })
   dashboardGrid: GridsterComponent;
@@ -89,13 +93,32 @@ export class DashboardComponent implements OnInit {
   }
 
   widgetEvents = {
-    widgetRemoved: (card: DashboardCard) => {
-      const index = this.cards.indexOf(card);
-      if (index >= 0) {
-        this.cards.splice(index, 1);
-      }
+    //widgetRemoved: (card: DashboardCard) => {
+    widgetRemoved: (chartName) => {
+      // const index = this.cards.indexOf(card);
+      // if (index >= 0) {
+      //   this.cards.splice(index, 1);
+      // }
+      this.cards = this.cards.filter(x => x.widgetSettings.widgetTitle != chartName);
+      this.widgetTypes.forEach(elmt => {
+        //if (elmt.module == card.widgetSettings.widgetTitle) {
+        if (elmt.module == chartName) {
+          elmt.checked = false;
+        }
+      });
+      this.widgetService.widgetsChartName.next(chartName);
     }
   };
+
+  onChangeWidgetEvents(chartName){
+    this.cards = this.cards.filter(x => x.widgetSettings.widgetTitle != chartName);
+    this.widgetTypes.forEach(elmt => {
+      if (elmt.module == chartName) {
+        elmt.checked = false;
+      }
+    });
+    this.widgetService.widgetsChartName.next(chartName);
+  }
 
   options: GridsterConfig;
 
@@ -116,15 +139,15 @@ export class DashboardComponent implements OnInit {
       draggable: {
         enabled: true,
         start: () => {
-            this.widgetMenuOpenedBeforeDrag = this.widgetMenuOpened;
-            this.widgetMenuOpened = false;
+          this.widgetMenuOpenedBeforeDrag = this.widgetMenuOpened;
+          this.widgetMenuOpened = false;
         },
         stop: () => {
-            this.widgetMenuOpened = this.widgetMenuOpenedBeforeDrag;
+          this.widgetMenuOpened = this.widgetMenuOpenedBeforeDrag;
         }
       },
       resizable: {
-          enabled: true
+        enabled: true
       },
       emptyCellDropCallback: this.onWidgetDrop.bind(this),
       enableEmptyCellDrop: true
@@ -178,9 +201,13 @@ export class DashboardComponent implements OnInit {
 
   cleanDashboard() {
     this.cards = [];
+    this.widgetTypes.forEach(x => {
+      x.checked = false;
+    });
   }
 
   showWidgetsPanel() {
+    this.widgetService.widgetsChartName.next("");
     this.widgetMenuOpened = true;
   }
 
@@ -188,7 +215,7 @@ export class DashboardComponent implements OnInit {
     this.widgetMenuOpened = false;
   }
 
-  public hide:boolean=true;
+  public hide: boolean = true;
   onWidgetTypeClicked(widgetType: WidgetType) {
     this.widgetService.widgetsChartName.next(widgetType.module);
     const card = this.CreateCard(0, 0, widgetType);
@@ -200,10 +227,10 @@ export class DashboardComponent implements OnInit {
 
   private CreateCard(x: number, y: number, widgetType: WidgetType) {
     const card = new DashboardCard({
-        component: widgetType.component,
-        componentName: widgetType.componentName,
-        widgetSettings: JSON.parse(JSON.stringify(widgetType.widgetSettings)),
-        placement: JSON.parse(JSON.stringify(widgetType.placement))
+      component: widgetType.component,
+      componentName: widgetType.componentName,
+      widgetSettings: JSON.parse(JSON.stringify(widgetType.widgetSettings)),
+      placement: JSON.parse(JSON.stringify(widgetType.placement))
     });
 
     card.placement.x = x;
@@ -215,12 +242,22 @@ export class DashboardComponent implements OnInit {
   private currentDraggableWidgetType: WidgetType;
 
   addCard(card: DashboardCard): void {
+    let newCard: any = [];
+    newCard = this.cards;
+    this.cards = [];
     this.cards.push(card);
+    if (newCard.length > 0) {
+      newCard.forEach(element => {
+        this.cards.push(element);
+      });
+    }
     //this.cards = JSON.parse(JSON.stringify(this.cards))
     console.log(this.cards);
   }
 
   onDragstart(widgetType: WidgetType) {
+    this.widgetService.widgetsChartName.next(widgetType.module);
+    widgetType.checked = true;
     this.options.maxItemCols = widgetType.placement.maxItemCols;
     this.options.minItemCols = widgetType.placement.minItemCols;
     this.options.maxItemRows = widgetType.placement.maxItemRows;
@@ -231,6 +268,5 @@ export class DashboardComponent implements OnInit {
     this.changedOptions();
 
     this.currentDraggableWidgetType = widgetType;
-    //this.widgetService.widgetsChartName.next(widgetType.module);
   }
 }

@@ -21,7 +21,7 @@
   <mat-sidenav #snav mode="over" position="end" [(opened)]="widgetMenuOpened">
     <div class="widgets-panel">
       <lib-widget-menu *ngIf="widgetMenuOpened" [widgetTypes]="widgetTypes" (closeButtonClicked)="hideWidgetsPanel()"
-        (widgetTypeClicked)="onWidgetTypeClicked($event)" (dragStart)="onDragstart($event)"></lib-widget-menu>
+        (widgetTypeClicked)="onWidgetTypeClicked($event)" (dragStart)="onDragstart($event)" (widgetRemoved)="onChangeWidgetEvents($event)"></lib-widget-menu>
     </div>
   </mat-sidenav>
   <mat-sidenav-content>

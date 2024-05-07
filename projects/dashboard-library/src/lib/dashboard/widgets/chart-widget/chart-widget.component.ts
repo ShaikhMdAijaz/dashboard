@@ -47,13 +47,18 @@ export class ChartWidgetComponent implements DoCheck {
       type: 'area'
     },
     title: {
-      text: 'Chart with negative values'
+      text: 'Area Chart'
     },
     xAxis: {
       categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
     },
     credits: {
       enabled: false
+    },
+    yAxis: {
+      title: {
+        text: 'Area YAxis'
+      }
     },
     series: [{
       name: 'John',
@@ -123,8 +128,16 @@ export class ChartWidgetComponent implements DoCheck {
     title: {
       text: 'Pie Chart'
     },
+    xAxis: {
+      categories: ['Pie X-Axis']
+    },
     credits: {
       enabled: false
+    },
+    yAxis: {
+      title: {
+        text: 'Pie Y-Axis'
+      }
     },
     series: [{
       name: 'Fruits', // Name of the series      
@@ -138,10 +151,13 @@ export class ChartWidgetComponent implements DoCheck {
   };
   chart: Highcharts.Chart;
   card: DashboardCard;
+  cards: DashboardCard;
 
 
-  onWidgetRemoved() {
-    this.widgetRemoved.emit(this.card);
+  onWidgetRemoved(event) {
+    //this.widgetRemoved.emit(this.card);
+    this.widgetRemoved.emit(event);
+    this.cards
   }
 
   ngDoCheck() {

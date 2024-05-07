@@ -12,6 +12,7 @@ export class DashboardCard {
   widgetSettings: WidgetSettings;
 
   placement: GridsterItem;
+  //cards?: DashboardCard[] = [];;
   //ng2Charts: Ng2ChartsModule;
 
   constructor(card: DashboardCard) {

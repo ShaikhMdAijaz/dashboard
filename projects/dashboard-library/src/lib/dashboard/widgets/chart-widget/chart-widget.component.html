@@ -1,9 +1,10 @@
-<mat-icon class="remove-btn" (click)="onWidgetRemoved()">clear</mat-icon>
+<!-- <mat-icon class="remove-btn" (click)="onWidgetRemoved($event)">clear</mat-icon> -->
 <!-- <highcharts-chart class="chart-container" (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
-    [options]="areaChart==true ? chartOptions : pieChart==true ? pieChartOptions : barchartOptions"> -->
-    
+  [options]="areaChart==true ? chartOptions : pieChart==true ? pieChartOptions : barchartOptions"> -->
+
 <!-- Area chart working start -->
 <ng-container *ngIf="areaChart==true">
+  <mat-icon class="remove-btn" (click)="onWidgetRemoved(chartOptions.title.text)">clear</mat-icon>
   <highcharts-chart class="chart-container" (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
     [options]="chartOptions">
   </highcharts-chart>
@@ -12,6 +13,7 @@
 
 <!-- Bar chart working start -->
 <ng-container *ngIf="barChart==true">
+  <mat-icon class="remove-btn" (click)="onWidgetRemoved(barchartOptions.title.text)">clear</mat-icon>
   <highcharts-chart class="chart-container" (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
     [options]="barchartOptions">
   </highcharts-chart>
@@ -20,6 +22,7 @@
 
 <!-- Pie chart working start -->
 <ng-container *ngIf="pieChart==true">
+  <mat-icon class="remove-btn" (click)="onWidgetRemoved(pieChartOptions.title.text)">clear</mat-icon>
   <highcharts-chart class="chart-container" (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
     [options]="pieChartOptions">
   </highcharts-chart>

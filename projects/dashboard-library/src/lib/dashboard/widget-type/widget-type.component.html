@@ -1,4 +1,7 @@
 <div #dragElement draggable="true" class="widget" (dblclick)="onClicked()" (dragstart)="onDragstart($event)">
+  <input type="checkbox" class="widget-chk" [id]="'widgetType.module'+i" [name]="'widgetType.module_chk'+i"
+    (change)="onChangeCheckbox(widgetType.checked,widgetType)" [(ngModel)]="widgetType.checked"
+    [checked]="widgetType.checked"/>
   <div class="title">{{widgetType.widgetSettings.widgetTitle}}</div>
   <img class="thumbnail" src="{{widgetType.thumbnailUrl}}">
   <p class="description">{{widgetType.description}}</p>

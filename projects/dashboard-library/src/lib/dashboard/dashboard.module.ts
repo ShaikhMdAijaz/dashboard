@@ -14,6 +14,7 @@ import { WidgetMenuComponent } from './widget-menu/widget-menu.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { WidgetTypeComponent } from './widget-type/widget-type.component';
 import { ChartsModule as Ng2ChartsModule} from 'ng2-charts';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ChartsModule as Ng2ChartsModule} from 'ng2-charts';
     MatToolbarModule,
     MatTabsModule,
     MatSidenavModule,
-    Ng2ChartsModule    
+    Ng2ChartsModule,    
+    FormsModule,
   ],
   exports: [DashboardComponent],
   entryComponents: [
