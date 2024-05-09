@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 })
 export class WidgetService {
   widgetsChartName = new Subject<any>();
+  actualData = new Subject<any>();
 constructor() { }
 
 }

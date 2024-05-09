@@ -4,6 +4,7 @@ import { DashboardCard } from './models/dashboard-card.model';
 import { ChartWidgetComponent } from './widgets/chart-widget/chart-widget.component';
 import { WidgetType } from './models/widget-type.model';
 import { WidgetService } from './_common-services/widget.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'lib-dashboard',
@@ -89,7 +90,7 @@ export class DashboardComponent implements OnInit {
   widgetMenuOpened = false;
   widgetMenuOpenedBeforeDrag: boolean;
 
-  constructor(private widgetService: WidgetService) {
+  constructor(private widgetService: WidgetService, private http: HttpClient) {
   }
 
   widgetEvents = {
@@ -110,7 +111,7 @@ export class DashboardComponent implements OnInit {
     }
   };
 
-  onChangeWidgetEvents(chartName){
+  onChangeWidgetEvents(chartName) {
     this.cards = this.cards.filter(x => x.widgetSettings.widgetTitle != chartName);
     this.widgetTypes.forEach(elmt => {
       if (elmt.module == chartName) {
@@ -125,6 +126,7 @@ export class DashboardComponent implements OnInit {
   cards: DashboardCard[] = [];
 
   ngOnInit() {
+    this.get_dashboard_data();
     this.widgetService.widgetsChartName.next("");
     this.options = {
       gridType: GridType.VerticalFixed,
@@ -152,6 +154,44 @@ export class DashboardComponent implements OnInit {
       emptyCellDropCallback: this.onWidgetDrop.bind(this),
       enableEmptyCellDrop: true
     };
+  }
+
+
+  public dashboardGraphData: any = [];
+  private headers: HttpHeaders;
+  private option: any;
+  get_dashboard_data() {
+    let header;
+    header = {
+      "X-Requested-With": "XMLHttpRequest",
+      "Authorization": "Bearer " + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoie1widXNlcl9pZFwiOjIxOCxcInVpZFwiOlwiYzM2MTQ3NWYtYTFkZC00NDM4LWIyYzQtNmFiNDFkYzkyZjk5XCIsXCJzaG9ydG5hbWVcIjpcIkFpamF6IFNrXCIsXCJuYW1lXCI6XCJBaWphelwiLFwiZGVzY3JpcHRpb25cIjpcIlwiLFwiZW1haWxfYWRkcmVzc1wiOlwiYXpAeW9wbWFpbC5jb21cIixcIm1vYmlsZV9ub1wiOlwiOTg3OTg3OTg3MFwiLFwiZG9iXCI6XCIxOTk4LTEyLTMxXCIsXCJ0b2tlblwiOm51bGwsXCJkZWZhdWx0X3JvbGVfaWRcIjozLFwiZGVmYXVsdF9hY2NvdW50X2lkXCI6MSxcImRlZmF1bHRfd2FyZWhvdXNlX2lkXCI6MTEsXCJkZWZhdWx0X2NvbXBhbnlfaWRcIjoxLFwiY29tcGFueV91aWRcIjpudWxsLFwiY29tcGFueV9uYW1lXCI6bnVsbCxcImNvbXBhbnlfY29kZVwiOm51bGwsXCJkZWZhdWx0X2FjY291bnRfbmFtZVwiOm51bGwsXCJkZWZhdWx0X2FjY291bnRfY29kZVwiOm51bGwsXCJkZWZhdWx0X3dhcmVob3VzZV9uYW1lXCI6bnVsbCxcImRlZmF1bHRfd2FyZWhvdXNlX2NvZGVcIjpudWxsLFwiZGVmYXVsdF9hY2NvdW50X3VpZFwiOm51bGwsXCJkZWZhdWx0X3dhcmVob3VzZV91aWRcIjpudWxsLFwidXNlcl9yb2xlc1wiOm51bGwsXCJ1c2VyX21vZHVsZV9hY2Nlc3NcIjpudWxsLFwidXNlcl9jb21tb25fc2VhcmNoX21vZHVsZVwiOm51bGwsXCJxdWlja0FkZE1vZHVsZXNcIjpudWxsLFwidXNlcl9kYXRhX2FjY2Vzc1wiOm51bGwsXCJhY2NvdW50X2F0dHJpYnV0ZVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGwsXCJjbGllbnRfZGF0ZV9mb3JtYXRcIjpudWxsLFwic2VydmVyX2RhdGVfZm9ybWF0XCI6bnVsbH0iLCJuYmYiOjE3MTUyMzIzMjgsImV4cCI6MTcxNTgzNzEyOCwiaWF0IjoxNzE1MjMyMzI4fQ.VHohLeIFaq9LPF6l8fVJxf9tldpOYsp2Ot8REYmrSXc'
+    };
+    this.headers = new HttpHeaders(header);
+    this.option = { headers: this.headers };
+    //this.httpServices.request('get', 'analytics/dashboard/details', '', '', null)
+    this.http.get('http://192.168.3.14:3000/api/analytics/dashboard/details', this.option).subscribe(data => {
+      if (data) {
+        //this.isRefreshChartFlag = false;
+        //this.ref.detectChanges();
+        //this.table_details = [];
+        //this.block_item = [];
+        this.dashboardGraphData = [];
+        //this.table_details = data.data.dashboardDetailDataRead;
+        //this.block_item = data.data.dashboardDetailItemDataRead;
+        this.dashboardGraphData = data;
+        this.widgetService.actualData.next(this.dashboardGraphData.data);
+        // if (this.dashboardGraphData != null && this.dashboardGraphData != undefined) {
+        //   this.dashboardGraphData.dashboardDetailDataRead.forEach((x: any) => {
+        //     x.isDynamicActiveTab = null;
+        //   });
+        //   this.dashboardGraphData.dashboardDetailItemDataRead.forEach((y: any) => {
+        //     y.isDynamicActiveTab = null;
+        //   });
+        //   //this.isRefreshChartFlag = true;
+        //   //this.ref.detectChanges();
+        // }
+      }
+    });
   }
 
   changedOptions() {
@@ -218,6 +258,7 @@ export class DashboardComponent implements OnInit {
   public hide: boolean = true;
   onWidgetTypeClicked(widgetType: WidgetType) {
     this.widgetService.widgetsChartName.next(widgetType.module);
+    this.widgetService.actualData.next(this.dashboardGraphData.data);
     const card = this.CreateCard(0, 0, widgetType);
     this.addCard(card);
     // if(card.widgetSettings.widgetTitle == 'Bar Chart'){

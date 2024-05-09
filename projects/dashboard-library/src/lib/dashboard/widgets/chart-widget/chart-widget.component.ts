@@ -7,15 +7,17 @@ import { WidgetService } from '../../_common-services/widget.service';
 @Component({
   selector: 'lib-chart-widget',
   templateUrl: './chart-widget.component.html',
-  styleUrls: ['./chart-widget.component.scss']
+  styleUrls: ['./chart-widget.component.css']
 })
 export class ChartWidgetComponent implements DoCheck {
 
   constructor(private widgetService: WidgetService) {
     this.widgetService.widgetsChartName.subscribe(this.setChartsFlag);
+    this.widgetService.actualData.subscribe(this.getDashboardData);
   }
 
-  public setindex:number=0;
+  public actualDashboarData: any = [];
+  public setindex: number = 0;
   setChartsFlag = (chartName) => {
     if (chartName != null && chartName != undefined) {
       console.log("setChartsFlag " + (this.setindex + 1))
@@ -34,6 +36,58 @@ export class ChartWidgetComponent implements DoCheck {
         this.areaChart = false;
         this.barChart = false;
         this.pieChart = true;
+      }
+    }
+  }
+
+  getDashboardData = (data) => {
+    this.actualDashboarData = data;
+    this.chartOptions
+    if (this.actualDashboarData != null && this.actualDashboarData != undefined) {
+      let areaCategories:any = {categories: []};
+      let areaSeries:any = [{data:[], name:"", type:undefined}]
+      let barCategories:any = {categories: []};
+      let barSeries:any = [{data:[], name:"", type:undefined}]
+      let pieSeries:any = [{data:[], name:"", type:undefined}]
+      this.chartOptions.xAxis = areaCategories;
+      this.chartOptions.series = areaSeries;
+      this.barchartOptions.xAxis = barCategories;
+      this.barchartOptions.series = barSeries;
+      this.pieChartOptions.series = pieSeries;
+      let item: any = [];
+      let currentTabData: any = [];
+      //item = this.actualDashboarData.dashboardDetailDataRead.filter((x: any) => x.id == this.tabID);
+      item = this.actualDashboarData.dashboardDetailDataRead[0];
+      //currentTabData = this.actualDashboarData.dashboardDetailItemDataRead.filter((y: any) => y.table_id == this.tabID);
+      currentTabData = this.actualDashboarData.dashboardDetailItemDataRead.filter((y: any) => y.table_id == item.id);
+      if (currentTabData != null && currentTabData != undefined && currentTabData.length > 0) {
+        currentTabData.forEach((element: any, i) => {
+          //working for bar-chart start
+          barSeries[0].name = item.table_name;
+          barSeries[0].data.push(Number(element.total_count.toString().trim()));
+          barCategories.categories.push(element.hdr_name.toString().trim());
+          //working for bar-chart end
+          
+          //working for pie-chart start
+          pieSeries[0].name = item.table_name;
+          //pieSeries[0].data.push(Number(element.total_count.toString().trim()));
+          pieSeries[0].data.push({name: element.hdr_name.toString().trim() , y: Number(element.total_count.toString().trim())});
+          //working for pie-chart end
+
+          //working for area-chart start
+          areaSeries[0].name = item.table_name;
+          areaSeries[0].data.push(Number(element.total_count.toString().trim()));
+          areaCategories.categories.push(element.hdr_name.toString().trim());
+          //working for area-chart end
+
+        });
+        this.chartOptions.xAxis = areaCategories;
+        this.chartOptions.series = areaSeries;
+        this.barchartOptions.xAxis = barCategories;
+        this.barchartOptions.series = barSeries;
+        this.barchartOptions.series = pieSeries;
+        console.log("chartOptions " + this.chartOptions)
+        console.log("barchartOptions " + this.barchartOptions)
       }
     }
   }
@@ -117,13 +171,22 @@ export class ChartWidgetComponent implements DoCheck {
   pieChartOptions: Highcharts.Options = {
     chart: {
       type: 'pie', // Set chart type to pie
-      height: 150, // Set the height of the pie chart
-      width: 100,   // Set the width of the pie chart
-      margin: [0, 0, 0, 0], // Set the margin to zero to center the chart
-      spacingTop: 0, // Remove top spacing
-      spacingBottom: 0, // Remove bottom spacing
-      spacingLeft: 0, // Remove left spacing
-      spacingRight: 0 // Remove right spacing
+       height: 150, // Set the height of the pie chart
+       width: 100,   // Set the width of the pie chart
+       margin: [0, 0, 0, 0], // Set the margin to zero to center the chart
+       spacingTop: 0, // Remove top spacing
+       spacingBottom: 0, // Remove bottom spacing
+       spacingLeft: 0, // Remove left spacing
+       spacingRight: 0 // Remove right spacing
+      //position: 'relative',
+      //,overflow: hidden,
+      //,width: 111%;
+      //,margin-top: 100px;
+      //,height: 249px;
+      //,text-align: left;
+      //,margin-left: 9px;
+      //,line-height: normal;
+      //,z-index: 0;
     },
     title: {
       text: 'Pie Chart'
@@ -174,12 +237,12 @@ export class ChartWidgetComponent implements DoCheck {
   public barChart: boolean = true;
   //public barChart: boolean = false;
   public pieChart: boolean = false;
-  public index:number=0;
+  public index: number = 0;
   onChartInstanceReceived(chart: Highcharts.Chart) {
     //if(this.setindex > 0){
-      console.log("chart " + (this.index + 1))
-      this.index = this.index + 1;
-      this.chart = chart;
+    console.log("chart " + (this.index + 1))
+    this.index = this.index + 1;
+    this.chart = chart;
     //}
     // if(this.chart != null && this.chart != undefined){
     //   //console.log(this.chart.userOptions.title.text);

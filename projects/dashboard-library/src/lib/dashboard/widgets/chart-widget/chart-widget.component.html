@@ -23,8 +23,10 @@
 <!-- Pie chart working start -->
 <ng-container *ngIf="pieChart==true">
   <mat-icon class="remove-btn" (click)="onWidgetRemoved(pieChartOptions.title.text)">clear</mat-icon>
-  <highcharts-chart class="chart-container" (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
+  <highcharts-chart class="chart-container" style="width: 100% !important;" (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
     [options]="pieChartOptions">
   </highcharts-chart>
 </ng-container>
 <!-- Pie chart working end -->
+
+

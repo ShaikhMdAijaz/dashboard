@@ -15,6 +15,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { WidgetTypeComponent } from './widget-type/widget-type.component';
 import { ChartsModule as Ng2ChartsModule} from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { FormsModule } from '@angular/forms';
     MatSidenavModule,
     Ng2ChartsModule,    
     FormsModule,
+    HttpClientModule
   ],
   exports: [DashboardComponent],
   entryComponents: [
