@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { WidgetType } from '../models/widget-type.model';
-import { WidgetService } from '../_common-services/widget.service';
 import { DashboardCard } from '../models/dashboard-card.model';
 
 @Component({
@@ -9,8 +8,7 @@ import { DashboardCard } from '../models/dashboard-card.model';
   styleUrls: ['./widget-type.component.scss']
 })
 export class WidgetTypeComponent {
-  @Input()
-  widgetType: WidgetType;
+  @Input() widgetType: WidgetType;
 
   @Output() widgetTypeClicked = new EventEmitter<WidgetType>();
   @Output() widgetTypeDragstart = new EventEmitter<WidgetType>();
@@ -23,21 +21,20 @@ export class WidgetTypeComponent {
   @ViewChild('dragElement', { static: true })
   private dragElement: ElementRef;
 
-  constructor(private widgetService: WidgetService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.widgetService.widgetsChartName.next("");
   }
 
   onClicked() {
-    this.widgetService.widgetsChartName.next(this.widgetType.module);
+    let passQueryParam = { chartName: this.widgetType.module};
+    sessionStorage.setItem("chartsValue", JSON.stringify(passQueryParam));
     this.widgetTypeClicked.emit(this.widgetType);
   }
   
   async onDragstart($event) {
     if(this.widgetType.checked == false){
       $event.dataTransfer.setDragImage(this.dragElement.nativeElement, 0, 0);
-      this.widgetService.widgetsChartName.next(this.widgetType.module);
       this.widgetTypeDragstart.emit(this.widgetType);
     }
     else{

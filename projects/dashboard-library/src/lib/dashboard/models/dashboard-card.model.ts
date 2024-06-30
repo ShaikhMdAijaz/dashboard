@@ -4,7 +4,8 @@ import { WidgetSettings } from './widget-settings.model';
 //import { Ng2ChartsModule} from 'ng2-charts';
 
 export class DashboardCard {
-
+  id:number;
+  widget_id:number;
   cardId?: string;
   component: any;
   componentName?: string;

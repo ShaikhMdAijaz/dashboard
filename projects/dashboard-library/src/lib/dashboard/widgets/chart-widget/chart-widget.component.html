@@ -1,32 +1,11 @@
-<!-- <mat-icon class="remove-btn" (click)="onWidgetRemoved($event)">clear</mat-icon> -->
-<!-- <highcharts-chart class="chart-container" (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
-  [options]="areaChart==true ? chartOptions : pieChart==true ? pieChartOptions : barchartOptions"> -->
 
-<!-- Area chart working start -->
-<ng-container *ngIf="areaChart==true">
-  <mat-icon class="remove-btn" (click)="onWidgetRemoved(chartOptions.title.text)">clear</mat-icon>
-  <highcharts-chart class="chart-container" (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
-    [options]="chartOptions">
-  </highcharts-chart>
+<ng-container *ngFor="let item of allChartsData; let i=index">
+  <ng-container *ngIf="item.chartOptions != null && item.chartOptions != undefined && item.chartOptions.isChecked==true">
+      <mat-icon class="remove-btn" (click)="onWidgetRemoved(item.chartOptions.title.text)">clear</mat-icon>
+      <highcharts-chart class="chart-container" [id]="'card_'+i"
+       (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
+        [options]="item.chartOptions">
+      </highcharts-chart>
+  </ng-container>
 </ng-container>
-<!-- Area chart working end -->
-
-<!-- Bar chart working start -->
-<ng-container *ngIf="barChart==true">
-  <mat-icon class="remove-btn" (click)="onWidgetRemoved(barchartOptions.title.text)">clear</mat-icon>
-  <highcharts-chart class="chart-container" (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
-    [options]="barchartOptions">
-  </highcharts-chart>
-</ng-container>
-<!-- Bar chart working end -->
-
-<!-- Pie chart working start -->
-<ng-container *ngIf="pieChart==true">
-  <mat-icon class="remove-btn" (click)="onWidgetRemoved(pieChartOptions.title.text)">clear</mat-icon>
-  <highcharts-chart class="chart-container" style="width: 100% !important;" (chartInstance)="onChartInstanceReceived($event)" [Highcharts]="Highcharts"
-    [options]="pieChartOptions">
-  </highcharts-chart>
-</ng-container>
-<!-- Pie chart working end -->
-
 

@@ -5,7 +5,8 @@ import { DashboardCard } from './dashboard-card.model';
 
 export class WidgetType {
     placement: GridsterItem;
-
+    id: number;
+    widget_id: number;
     /* Widget component to create dynamically */
     component: any;
     componentName: string;
@@ -15,7 +16,5 @@ export class WidgetType {
     description: string;
     module: string;
     thumbnailUrl: string;
-    checked : boolean;
-    //cards : DashboardCard[] = [];;
-    //ng2Charts: Ng2ChartsModule;
+    checked: boolean;
 }

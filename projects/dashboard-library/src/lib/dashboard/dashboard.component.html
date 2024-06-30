@@ -6,13 +6,16 @@
     </mat-tab>
   </mat-tab-group>
   <span class="fill-remaining-space"></span>
-  <button mat-mini-fab (click)="addItem()" class="toolbar-button">
+  <!-- <button mat-mini-fab (click)="addItem()" class="toolbar-button">
     <mat-icon>add</mat-icon>
+  </button> -->
+  <button mat-mini-fab class="toolbar-button" title="save" (click)="onSaveCharts()">
+    <mat-icon>save</mat-icon>    
   </button>
-  <button *ngIf="!widgetMenuOpened" mat-mini-fab (click)="showWidgetsPanel()" class="toolbar-button">
+  <button *ngIf="!widgetMenuOpened" mat-mini-fab (click)="showWidgetsPanel()" title="add widgets" class="toolbar-button">
     <mat-icon>add_photo_alternate</mat-icon>
   </button>
-  <button mat-mini-fab (click)="cleanDashboard()" class="toolbar-button">
+  <button mat-mini-fab (click)="cleanDashboard()" title="clear all" class="toolbar-button">
     <mat-icon>delete_sweep</mat-icon>
   </button>
 </mat-toolbar>
@@ -21,15 +24,18 @@
   <mat-sidenav #snav mode="over" position="end" [(opened)]="widgetMenuOpened">
     <div class="widgets-panel">
       <lib-widget-menu *ngIf="widgetMenuOpened" [widgetTypes]="widgetTypes" (closeButtonClicked)="hideWidgetsPanel()"
-        (widgetTypeClicked)="onWidgetTypeClicked($event)" (dragStart)="onDragstart($event)" (widgetRemoved)="onChangeWidgetEvents($event)"></lib-widget-menu>
+      (widgetTypeClicked)="onWidgetTypeClicked($event)" (dragStart)="onDragstart($event)" (widgetRemoved)="onChangeWidgetEvents($event)"></lib-widget-menu>
     </div>
   </mat-sidenav>
+
   <mat-sidenav-content>
     <gridster [options]="options" #dashboardgrid>
-      <gridster-item [item]="card.placement" [id]="('card_'+i)" *ngFor="let card of cards;let i=index">
-        <ng-container libDynamicComponent [component]="card.component" [inputs]="{card: card}" [outputs]="widgetEvents">
-        </ng-container>
-      </gridster-item>
+      <ng-container *ngFor="let card of cards; let i = index">
+        <gridster-item [item]="card.placement" [id]="'card_' + i+1*2">
+          <ng-container libDynamicComponent [component]="card.component" [inputs]="{card: card}" [outputs]="widgetEvents">
+          </ng-container>
+        </gridster-item>
+      </ng-container>
     </gridster>
   </mat-sidenav-content>
 </mat-sidenav-container>

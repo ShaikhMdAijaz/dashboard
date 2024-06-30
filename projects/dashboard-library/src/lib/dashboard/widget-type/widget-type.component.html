@@ -1,5 +1,6 @@
-<div #dragElement draggable="false" class="widget" (dblclick)="onClicked()" (dragstart)="onDragstart($event)">
-  <input type="checkbox" class="widget-chk" [id]="'widgetType.module'+i" [name]="'widgetType.module_chk'+i"
+<!-- <div #dragElement draggable="false" class="widget" (dblclick)="onClicked()" (dragstart)="onDragstart($event)"> -->
+<div #dragElement draggable="false" class="widget" (dragstart)="onDragstart($event)">
+  <input type="checkbox" class="widget-chk" [id]="'widgetTypeModule'" [name]="'widgetTypeModule_chk'"
     (change)="onChangeCheckbox(widgetType.checked,widgetType)" [(ngModel)]="widgetType.checked"
     [checked]="widgetType.checked"/>
   <div class="title">{{widgetType.widgetSettings.widgetTitle}}</div>

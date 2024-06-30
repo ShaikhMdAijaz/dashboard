@@ -4,9 +4,7 @@
 
 <mat-list>
   <ng-container *ngFor="let widgetType of widgetTypes; let i = index">
-    <!-- <input type="checkbox" class="widget-chk" [id]="'widgetType.module'+i" [name]="'widgetType.module_chk'+i"
-    (change)="onChangeCheckbox(widgetType.checked,widgetType)"/> -->
-    <lib-widget-type [widgetType]="widgetType" (widgetTypeDragstart)="onDragstart(widgetType)"
+    <lib-widget-type [widgetType]="widgetType" [id]="'widgetMenuModule_'+i" (widgetTypeDragstart)="onDragstart(widgetType)"
       (widgetTypeClicked)="onWidgetTypeClicked($event)" (widgetRemoved)="onWidgetRemoved($event)"></lib-widget-type>
   </ng-container>
 </mat-list>
